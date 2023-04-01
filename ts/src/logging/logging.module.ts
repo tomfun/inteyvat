@@ -7,7 +7,7 @@ import { InformService } from './inform.service';
 import { LoggingConfig } from './logging.config';
 import { MailService } from './mail.service';
 import { TelegramService } from './telegram.service';
-import {OnModuleInit} from "@nestjs/common/interfaces/hooks/on-init.interface";
+import { OnModuleInit } from '@nestjs/common/interfaces/hooks/on-init.interface';
 
 @Global()
 @Module({

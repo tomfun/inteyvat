@@ -1,10 +1,4 @@
-import {
-  Controller,
-  Get,
-  Header,
-  Param,
-  Res,
-} from '@nestjs/common';
+import { Controller, Get, Header, Param, Res } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FastifyReply } from 'fastify/types/reply';
 import { Repository } from 'typeorm';
@@ -30,10 +24,7 @@ export class FormController {
   @Get('/form/:id')
   @Header('Cache-Control', 'none')
   @Header('content-type', 'text/html')
-  async show(
-    @Param('id') id: number,
-    @Res() res: FastifyReply,
-  ): Promise<void> {
+  async show(@Param('id') id: number, @Res() res: FastifyReply): Promise<void> {
     const tournament = await this.tournamentRepository.findOne({
       where: { id },
     });
