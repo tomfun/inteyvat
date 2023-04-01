@@ -1,0 +1,52 @@
+name: minimal tests & build
+on: [ push ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.x
+          cache: npm
+
+      - run: |
+          npm ci
+          npm run build
+          npm run lint
+          npm test
+
+  docker-build-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.HUB_DOCKER_USER }}
+          password: ${{ secrets.HUB_DOCKER_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Build and push API
+        id: docker_build_api
+        uses: docker/build-push-action@v3
+        with:
+          context: ./
+          file: ./docker/api/Dockerfile
+          push: true
+          pull: true
+          platforms: linux/arm64,linux/amd64
+          tags: |
+            ${{ secrets.HUB_DOCKER_USER }}/inteyvat-api:${{ github.ref_name }}
+            ${{ secrets.HUB_DOCKER_USER }}/inteyvat-api:${{ github.sha }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/tomfun/inteyvat
+            org.opencontainers.image.licenses=MIT
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build_api.outputs.digest }}

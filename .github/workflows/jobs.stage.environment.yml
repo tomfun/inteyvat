@@ -1,0 +1,40 @@
+name: Deployment
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  workflow_run:
+    workflows: [ minimal tests & build ]
+    branches: [main]
+    types:
+      - completed
+#  push:
+#    branches:
+#      - main
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    environment:
+      name: stage
+      url: default-demo-inteyvat.tomfun.co
+      # url
+      # https://stackoverflow.com/questions/67385568/github-actions-how-to-dynamically-set-environment-url-based-on-deployment-step
+      # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-using-environment-name-and-url
+    env:
+      JENKINS_DEMO_DEPLOY_TOKEN: ${{ secrets.JENKINS_DEMO_DEPLOY_TOKEN }}
+      CI_BUILD_REF: ${{ github.sha }}
+      #          PUBLIC_HTTP_HOST: ${{ jobs.deployment.environment.url }}
+      PUBLIC_HTTP_HOST: default-demo-inteyvat.tomfun.co
+    steps:
+      - name: deploy
+        run: |
+          #          export PUBLIC_HTTP_HOST=${CI_ENVIRONMENT_SLUG}-demo-blog.tomfun.co
+          export PUBLIC_HTTP_URL=https://$PUBLIC_HTTP_HOST
+          export URI_TO_TEST=${PUBLIC_HTTP_URL}/.wtf/D_I_TAG_UNIQ
+          echo "$PUBLIC_HTTP_URL"
+          curl --fail -XPOST "https://jenkins.tomfun.co/buildByToken/buildWithParameters?job=inteyvat.tomfun.co%2Fdeploy&token=$JENKINS_DEMO_DEPLOY_TOKEN&IMAGE_TAG=$CI_BUILD_REF&PUBLIC_HTTP_HOST=$PUBLIC_HTTP_HOST"
+          sleep 40
+          curl --fail -XGET $URI_TO_TEST | grep -i "$CI_BUILD_REF" || sleep 40
+          curl --fail -XGET $URI_TO_TEST | grep -i "$CI_BUILD_REF" || sleep 20
+          curl --fail -XGET $URI_TO_TEST | grep -i "$CI_BUILD_REF"

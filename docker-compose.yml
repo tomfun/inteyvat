@@ -1,0 +1,53 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:14.5
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: pass
+      POSTGRES_USER: inteyvat
+      POSTGRES_DB: inteyvat
+      PGDATA: /var/lib/postgresql/data/postgres
+    volumes:
+#      - ./docker/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./docker/data/postgres:/var/lib/postgresql/data
+
+  api:
+    image: node:18
+    ports:
+      - 3005:3005
+      - 9229:9229
+    environment:
+#      DEBUG: '*'
+      ENVIRONMENT: local
+      VERSION: n/a
+      ADDRESS: 0.0.0.0
+      DB_DATABASE: postgres
+      DB_HOST: postgres
+      DB_PASSWORD: pass
+      DB_USERNAME: inteyvat
+      LOG: ""
+      LOGGING_SENDGRID_API_KEY: 'SG.jI......---------------------------------------.......WbE'
+      LOGGING_SENDGRID_EMAIL_FROM: tomfun1990+sendgrid@gmail.com
+      LOGGING_SENDGRID_EMAIL_TO: tomfun1990+inteyvat-dev@gmail.com
+      LOGGING_TELEGRAM_BOT_TOKEN: ${LOGGING_TELEGRAM_BOT_TOKEN}
+      LOGGING_TELEGRAM_CHAT_ID: '-833490330'
+      # 1 hour
+      NOTIFICATION_RETRY_IN: '1M,5M,5M,1H,1D,7D'
+      LOGGING_SILENT_FOR_PER_INSTANCE: 'P0D1H0M'
+      PORT: "3005"
+      PUBLIC_URL: 'http://localhost:3005'
+      SENTRY_DISABLE: '1'
+      TRUST_PROXY: "1"
+
+#   command: node --trace-warnings --enable-source-maps dist/src/main
+#    command: npm run start:dev
+#    command: node --inspect-brk=0.0.0.0:9229 -r tsconfig-paths/register -r ts-node/register ts/src/main.ts
+    command: npm run start:debug
+    working_dir: /inteyvat/api
+    depends_on:
+      - postgres
+    volumes:
+      - ./:/inteyvat/api
