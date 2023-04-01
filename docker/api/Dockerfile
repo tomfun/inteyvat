@@ -4,7 +4,7 @@ WORKDIR /app/api
 
 CMD ["node", "--trace-warnings", "--enable-source-maps", "dist/main"]
 
-COPY api/package*.json ./
+COPY package*.json ./
 
 RUN npm --loglevel warn --color=always install
 

@@ -15,7 +15,7 @@ services:
       - ./docker/data/postgres:/var/lib/postgresql/data
 
   api:
-    image: node:18
+    image: node:18.15-alpine3.17
     ports:
       - 3005:3005
       - 9229:9229
