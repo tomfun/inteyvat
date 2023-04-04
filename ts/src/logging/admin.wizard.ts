@@ -79,7 +79,9 @@ export function initAdminWizard(
           bot,
           chat,
           '⛑ Отримано нову заявку на вступ до адмінки від: ' +
-            ctx.scene.session.form.userName + '\n' + info,
+            ctx.scene.session.form.userName +
+            '\n' +
+            info,
         );
 
         return ctx.scene.leave();

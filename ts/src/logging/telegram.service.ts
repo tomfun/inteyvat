@@ -32,7 +32,9 @@ export class TelegramService {
       }
 
       this.sendMessage(
-        '📩 Отримано повідомлення від: ' + ctx.scene.session.form.userName + '\n' +
+        '📩 Отримано повідомлення від: ' +
+          ctx.scene.session.form.userName +
+          '\n' +
           'Тег: @' +
           ctx.scene.session.form.userTag +
           '\n' +
@@ -49,7 +51,9 @@ export class TelegramService {
       }
 
       this.sendMessage(
-        '🧧 Отримано новий пост від: ' + ctx.scene.session.form.userName + '\n' +
+        '🧧 Отримано новий пост від: ' +
+          ctx.scene.session.form.userName +
+          '\n' +
           'Тег: @' +
           ctx.scene.session.form.userTag +
           '\n' +
@@ -85,10 +89,20 @@ export class TelegramService {
     ctx.reply('Що вас цікавить?', {
       reply_markup: {
         inline_keyboard: [
-          [{ text: '📝 Надіслати заявку на вступ до адміністрації', callback_data: 'administration' }],
+          [
+            {
+              text: '📝 Надіслати заявку на вступ до адміністрації',
+              callback_data: 'administration',
+            },
+          ],
           [{ text: '🧚‍ Запропонувати пост', callback_data: 'suggest' }],
           [{ text: '💌 Надіслати будь-що', callback_data: 'contact' }],
-          [{ text: '🧭 Навігація по каналу', url: 'https://t.me/ua_genshin/922' }],
+          [
+            {
+              text: '🧭 Навігація по каналу',
+              url: 'https://t.me/ua_genshin/922',
+            },
+          ],
         ],
       },
     });
