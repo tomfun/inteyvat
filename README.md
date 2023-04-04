@@ -5,15 +5,16 @@
 
 ## Config
 
-create `.env` file credentials, docker compose take it only
-if you are in the **api** directory:
+create `.env` file with credentials, docker compose take it
 ```bash
-docker compose up -d
+docker compose up
 ```
 
 ## Installation
 
 ```bash
+docker compose run api npm i
+# or
 npm install
 ```
 
