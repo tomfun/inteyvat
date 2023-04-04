@@ -8,9 +8,12 @@ import { initSuggestWizard } from './suggest.wizard';
 import { LoggingConfig } from './logging.config';
 import { TelegrafContext } from './types';
 import { sendMessage } from './messages.service';
+import { SentryService } from '@ntegral/nestjs-sentry';
+import { InjectSentry } from '../decorators';
 
 @Injectable()
 export class TelegramService {
+  @InjectSentry() private readonly sentryService: SentryService;
   private readonly bot: Telegraf<TelegrafContext>;
   private botLaunch: Promise<void>;
   private readonly chat: string;
@@ -26,23 +29,28 @@ export class TelegramService {
 
     const stage = new Scenes.Stage([adminWizard, contactWizard, suggestWizard]);
 
-    stage.action('no_image_message', (ctx) => {
-      if (!ctx.scene.session.form?.userTag || !ctx.scene.session.form?.post) {
+    stage.action('no_image_message', async (ctx) => {
+      try {
+        if (!ctx.scene.session.form?.userTag || !ctx.scene.session.form?.post) {
+          return ctx.scene.leave();
+        }
+
+        await this.sendMessage(
+          '📩 Отримано повідомлення від: ' +
+            ctx.scene.session.form.userName +
+            '\n' +
+            'Тег: @' +
+            ctx.scene.session.form.userTag +
+            '\n' +
+            'Текст: ' +
+            ctx.scene.session.form.post,
+        );
+        await ctx.reply('🎉 Повідомлення прийнято! Дякую!');
+        return ctx.scene.leave();
+      } catch (e) {
+        this.sentryService.instance().captureException(e);
         return ctx.scene.leave();
       }
-
-      this.sendMessage(
-        '📩 Отримано повідомлення від: ' +
-          ctx.scene.session.form.userName +
-          '\n' +
-          'Тег: @' +
-          ctx.scene.session.form.userTag +
-          '\n' +
-          'Текст: ' +
-          ctx.scene.session.form.post,
-      );
-      ctx.reply('🎉 Повідомлення прийнято! Дякую!');
-      return ctx.scene.leave();
     });
 
     stage.action('no_image', (ctx) => {
