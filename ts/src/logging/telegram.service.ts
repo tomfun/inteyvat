@@ -33,8 +33,11 @@ export class TelegramService {
 
       this.sendMessage(
         '📩 Отримано повідомлення від: ' + ctx.scene.session.form.userName + '\n' +
-        'Тег: @' + ctx.scene.session.form.userTag + '\n' +
-        'Текст: ' + ctx.scene.session.form.post,
+          'Тег: @' +
+          ctx.scene.session.form.userTag +
+          '\n' +
+          'Текст: ' +
+          ctx.scene.session.form.post,
       );
       ctx.reply('🎉 Повідомлення прийнято! Дякую!');
       return ctx.scene.leave();
@@ -47,8 +50,11 @@ export class TelegramService {
 
       this.sendMessage(
         '🧧 Отримано новий пост від: ' + ctx.scene.session.form.userName + '\n' +
-        'Тег: @' + ctx.scene.session.form.userTag + '\n' +
-        'Пост: ' + ctx.scene.session.form.post,
+          'Тег: @' +
+          ctx.scene.session.form.userTag +
+          '\n' +
+          'Пост: ' +
+          ctx.scene.session.form.post,
       );
       ctx.reply(
         '🎉 Пост прийнято! Якщо виникнуть питання - адміністрація напише вам у особисті.',

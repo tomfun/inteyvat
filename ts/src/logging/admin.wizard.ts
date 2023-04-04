@@ -24,7 +24,7 @@ export function initAdminWizard(
           'Щоб залишити заявку, дайте відповідь на декілька запитань, будь ласка.',
           Markup.inlineKeyboard([
             Markup.button.callback('❌ Скасувати заявку', 'cancel'),
-        ]),
+          ]),
         )
         .then(() => {
           ctx.reply('Скільки часу ви готові присвячувати каналу на день?');
@@ -62,10 +62,18 @@ export function initAdminWizard(
           );
         });
 
-        const info = 'Тег: @' + ctx.scene.session.form.userTag + '\n' +
-          'Час на день: ' + ctx.scene.session.form.time + '\n' +
-          'Вміння: ' + ctx.scene.session.form.knowledge + '\n' +
-          'Теми: ' + ctx.scene.session.form.topics;
+        const info =
+          'Тег: @' +
+          ctx.scene.session.form.userTag +
+          '\n' +
+          'Час на день: ' +
+          ctx.scene.session.form.time +
+          '\n' +
+          'Вміння: ' +
+          ctx.scene.session.form.knowledge +
+          '\n' +
+          'Теми: ' +
+          ctx.scene.session.form.topics;
 
         sendMessage(
           bot,

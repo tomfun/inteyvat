@@ -50,10 +50,16 @@ export function initContactWizard(
             bot,
             chat,
             '📩 Отримано повідомлення від: ' +
-            ctx.scene.session.form.userName + '\n' +
-            'Тег: @' + ctx.scene.session.form.userTag + '\n' +
-            'Текст: ' + ctx.scene.session.form.post + '\n' +
-            'Картинка: ' + url.href,
+              ctx.scene.session.form.userName +
+              '\n' +
+              'Тег: @' +
+              ctx.scene.session.form.userTag +
+              '\n' +
+              'Текст: ' +
+              ctx.scene.session.form.post +
+              '\n' +
+              'Картинка: ' +
+              url.href,
             picture,
           );
           ctx.reply('🎉 Повідомлення прийнято! Дякую!');
